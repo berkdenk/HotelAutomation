@@ -1,0 +1,148 @@
+﻿@using otelotomasyonu.Models
+@model List<yetkili>
+@{
+    ViewBag.Title = "Kullanici_Duzenle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .disabled {
+            background-color: transparent;
+            border-color: none;
+            border-style: none;
+        }
+
+        .enabled {
+            background-color: white;
+            border-color: lightslategray;
+            border-style: solid;
+        }
+    </style>
+    <script>
+
+        function sil(id) {
+            if (confirm(id+'li kullanıcıyı silmek istediğinize emin misiniz?')) {
+                // Save it!
+                window.location = "Sil?u_id=" + id;
+                
+            } else {
+                // Do nothing!
+                
+            }
+        }
+
+        function degistir(id) {
+            const ad = document.getElementById(id + "ad");
+            const password = document.getElementById(id + "password");
+            const yetki = document.getElementById(id + "yetki");
+            const degistir = document.getElementById(id + "degistir");
+            if (ad.className == "disabled") {
+                ad.classList.remove("disabled");
+                ad.classList.add("enabled");
+
+            }
+            else {
+                ad.classList.remove("enabled");
+                ad.classList.add("disabled");
+            }
+            if (password.className == "disabled") {
+                password.classList.remove("disabled");
+                password.classList.add("enabled");
+
+            }
+            else {
+                password.classList.remove("enabled");
+                password.classList.add("disabled");
+            }
+            if (yetki.className == "disabled") {
+                yetki.classList.remove("disabled");
+                yetki.classList.add("enabled");
+
+            }
+            else {
+                yetki.classList.remove("enabled");
+                yetki.classList.add("disabled");
+            }
+            if (degistir.classList.contains("btn-warning")) {
+                degistir.classList.remove("btn-warning");
+                degistir.classList.add("btn-success");
+                degistir.innerText = "Kaydet"
+
+            }
+            else {
+                degistir.classList.remove("btn-success");
+                degistir.classList.add("btn-warning");
+                degistir.innerText = "Düzenle"
+                window.location = "Guncelle?u_id=" + id + "&u_ad=" + ad.value + "&u_password=" + password.value + "&u_yetki=" + yetki.value;
+            }
+
+
+        }
+
+
+
+    </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanici Duzenleme</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <link href="~/login-form-17/css2/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/login-form-17/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });</script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row header" style="text-align:center;color:green">
+            <h3>Kayıtlı Kullanicilar</h3>
+        </div>
+        <form method="post">
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Kullanici ID</th>
+                        <th>Kullanici Ad</th>
+                        <th>Kullanici Şifre</th>
+                        <th>Kullanici Yetki</th>
+                        <th>Düzenleme</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        if(item.u_gecerli==true)
+                        { 
+                            <tr>
+
+                                <td><input type="text" name="@item.u_id" value="@item.u_id" style="background-color:transparent;border-style:none;" /></td>
+                                <td><input type="text" name="@item.u_ad" id="@(@item.u_id)ad" value="@item.u_ad"  class="disabled" /> </td>
+                                <td><input type="text" name="@item.u_password" id="@(@item.u_id)password"  value="@item.u_password" class="disabled" /></td>
+                                <td><input type="text" name="@item.u_yetki" id="@(@item.u_id)yetki" value="@if (item.u_yetki == 1) { Write("Ceo"); }@if (item.u_yetki == 2) { Write("Müdür"); }@if (item.u_yetki == 3) { Write("Personel"); }  "class="disabled" /></td>
+                                <td>
+                                    <a href="#" id="@item.u_id" name="@item.u_id" onclick="sil(@item.u_id)" class="btn btn-danger">Sil</a> @if (!User.IsInRole("3"))
+                                    {
+                                        <a href="#" onclick="degistir(@item.u_id)" name="@item.u_id" id="@(@item.u_id)degistir" degistir" class="btn btn-warning">Düzenle</a>
+
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+</html>
+

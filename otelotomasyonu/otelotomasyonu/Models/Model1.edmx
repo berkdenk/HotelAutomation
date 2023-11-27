@@ -1,0 +1,328 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="otelaspModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="musteriler">
+          <Key>
+            <PropertyRef Name="mus_id" />
+          </Key>
+          <Property Name="mus_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="mus_tc" Type="varchar" MaxLength="15" />
+          <Property Name="mus_ad" Type="varchar" MaxLength="50" />
+          <Property Name="mus_soyad" Type="varchar" MaxLength="50" />
+          <Property Name="mus_tel" Type="varchar" MaxLength="20" />
+          <Property Name="kaldigi_oda" Type="int" />
+          <Property Name="kaldigi_gtarih" Type="datetime" />
+          <Property Name="kaldigi_ctarih" Type="datetime" />
+        </EntityType>
+        <EntityType Name="odalar">
+          <Key>
+            <PropertyRef Name="oda_id" />
+          </Key>
+          <Property Name="oda_id" Type="int" Nullable="false" />
+          <Property Name="oda_tip" Type="smallint" />
+          <Property Name="oda_durum" Type="bit" />
+          <Property Name="oda_ozellik" Type="smallint" />
+          <Property Name="oda_ucret" Type="int" />
+        </EntityType>
+        <EntityType Name="odalar_kayit">
+          <Key>
+            <PropertyRef Name="kayit_id" />
+          </Key>
+          <Property Name="kayit_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kayit_mus_tc" Type="varchar" MaxLength="50" />
+          <Property Name="kayit_oda_id" Type="int" />
+          <Property Name="kayit_giris_tarih" Type="datetime" />
+          <Property Name="kayit_cikis_tarih" Type="datetime" />
+          <Property Name="kayit_gecerlilik" Type="bit" />
+        </EntityType>
+        <EntityType Name="otel_log">
+          <Key>
+            <PropertyRef Name="islem_id" />
+          </Key>
+          <Property Name="islem_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="islem_aciklama" Type="varchar" MaxLength="250" />
+          <Property Name="islem_yapan" Type="varchar" MaxLength="50" />
+          <Property Name="islem_yapilan_zaman" Type="date" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="yetkiler">
+          <Key>
+            <PropertyRef Name="yetki_id" />
+          </Key>
+          <Property Name="yetki_id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="yetki_ad" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="yetkili">
+          <Key>
+            <PropertyRef Name="u_id" />
+          </Key>
+          <Property Name="u_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="u_ad" Type="varchar" MaxLength="50" />
+          <Property Name="u_password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="u_yetki" Type="smallint" Nullable="false" />
+          <Property Name="u_gecerli" Type="bit" />
+        </EntityType>
+        <Association Name="FK_odalar_kayit_odalar">
+          <End Role="odalar" Type="Self.odalar" Multiplicity="0..1" />
+          <End Role="odalar_kayit" Type="Self.odalar_kayit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="odalar">
+              <PropertyRef Name="oda_id" />
+            </Principal>
+            <Dependent Role="odalar_kayit">
+              <PropertyRef Name="kayit_oda_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="otelaspModelStoreContainer">
+          <EntitySet Name="musteriler" EntityType="Self.musteriler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="odalar" EntityType="Self.odalar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="odalar_kayit" EntityType="Self.odalar_kayit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="otel_log" EntityType="Self.otel_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="yetkiler" EntityType="Self.yetkiler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="yetkili" EntityType="Self.yetkili" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_odalar_kayit_odalar" Association="Self.FK_odalar_kayit_odalar">
+            <End Role="odalar" EntitySet="odalar" />
+            <End Role="odalar_kayit" EntitySet="odalar_kayit" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="otelaspModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="yetkiler">
+          <Key>
+            <PropertyRef Name="yetki_id" />
+          </Key>
+          <Property Name="yetki_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="yetki_ad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="yetkili" Relationship="Self.FK_yetkili_yetkiler" FromRole="yetkiler" ToRole="yetkili" />
+        </EntityType>
+        <EntityType Name="yetkili">
+          <Key>
+            <PropertyRef Name="u_id" />
+          </Key>
+          <Property Name="u_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="u_ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="u_password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="u_yetki" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="yetkiler" Relationship="Self.FK_yetkili_yetkiler" FromRole="yetkili" ToRole="yetkiler" />
+          <Property Name="u_gecerli" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_yetkili_yetkiler">
+          <End Role="yetkiler" Type="Self.yetkiler" Multiplicity="1" />
+          <End Role="yetkili" Type="Self.yetkili" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="yetkiler">
+              <PropertyRef Name="yetki_id" />
+            </Principal>
+            <Dependent Role="yetkili">
+              <PropertyRef Name="u_yetki" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="otelaspEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="yetkiler" EntityType="Self.yetkiler" />
+          <EntitySet Name="yetkili" EntityType="Self.yetkili" />
+          <AssociationSet Name="FK_yetkili_yetkiler" Association="Self.FK_yetkili_yetkiler">
+            <End Role="yetkiler" EntitySet="yetkiler" />
+            <End Role="yetkili" EntitySet="yetkili" />
+          </AssociationSet>
+          <EntitySet Name="musteriler" EntityType="otelaspModel.musteriler" />
+          <EntitySet Name="odalar" EntityType="otelaspModel.odalar" />
+          <EntitySet Name="odalar_kayit" EntityType="otelaspModel.odalar_kayit" />
+          <AssociationSet Name="FK_odalar_kayit_odalar" Association="otelaspModel.FK_odalar_kayit_odalar">
+            <End Role="odalar" EntitySet="odalar" />
+            <End Role="odalar_kayit" EntitySet="odalar_kayit" />
+          </AssociationSet>
+          <EntitySet Name="otel_log" EntityType="otelaspModel.otel_log" />
+        </EntityContainer>
+        <EntityType Name="musteriler">
+          <Key>
+            <PropertyRef Name="mus_id" />
+          </Key>
+          <Property Name="mus_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="mus_tc" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="mus_ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mus_soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mus_tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="kaldigi_oda" Type="Int32" />
+          <Property Name="kaldigi_gtarih" Type="DateTime" Precision="3" />
+          <Property Name="kaldigi_ctarih" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="odalar">
+          <Key>
+            <PropertyRef Name="oda_id" />
+          </Key>
+          <Property Name="oda_id" Type="Int32" Nullable="false" />
+          <Property Name="oda_tip" Type="Int16" />
+          <Property Name="oda_durum" Type="Boolean" />
+          <Property Name="oda_ozellik" Type="Int16" />
+          <Property Name="oda_ucret" Type="Int32" />
+          <NavigationProperty Name="odalar_kayit" Relationship="otelaspModel.FK_odalar_kayit_odalar" FromRole="odalar" ToRole="odalar_kayit" />
+        </EntityType>
+        <EntityType Name="odalar_kayit">
+          <Key>
+            <PropertyRef Name="kayit_id" />
+          </Key>
+          <Property Name="kayit_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kayit_mus_tc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="kayit_oda_id" Type="Int32" />
+          <Property Name="kayit_giris_tarih" Type="DateTime" Precision="3" />
+          <Property Name="kayit_cikis_tarih" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="odalar" Relationship="otelaspModel.FK_odalar_kayit_odalar" FromRole="odalar_kayit" ToRole="odalar" />
+          <Property Name="kayit_gecerlilik" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_odalar_kayit_odalar">
+          <End Type="otelaspModel.odalar" Role="odalar" Multiplicity="0..1" />
+          <End Type="otelaspModel.odalar_kayit" Role="odalar_kayit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="odalar">
+              <PropertyRef Name="oda_id" />
+            </Principal>
+            <Dependent Role="odalar_kayit">
+              <PropertyRef Name="kayit_oda_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="otel_log">
+          <Key>
+            <PropertyRef Name="islem_id" />
+          </Key>
+          <Property Name="islem_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="islem_aciklama" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="islem_yapan" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="islem_yapilan_zaman" Type="DateTime" Precision="0" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="otelaspModelStoreContainer" CdmEntityContainer="otelaspEntities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="otelaspModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="yetkiler">
+            <EntityTypeMapping TypeName="otelaspModel.yetkiler">
+              <MappingFragment StoreEntitySet="yetkiler">
+                <ScalarProperty Name="yetki_id" ColumnName="yetki_id" />
+                <ScalarProperty Name="yetki_ad" ColumnName="yetki_ad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="yetkili">
+            <EntityTypeMapping TypeName="otelaspModel.yetkili">
+              <MappingFragment StoreEntitySet="yetkili">
+                <ScalarProperty Name="u_gecerli" ColumnName="u_gecerli" />
+                <ScalarProperty Name="u_id" ColumnName="u_id" />
+                <ScalarProperty Name="u_ad" ColumnName="u_ad" />
+                <ScalarProperty Name="u_password" ColumnName="u_password" />
+                <ScalarProperty Name="u_yetki" ColumnName="u_yetki" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="musteriler">
+            <EntityTypeMapping TypeName="otelaspModel.musteriler">
+              <MappingFragment StoreEntitySet="musteriler">
+                <ScalarProperty Name="kaldigi_ctarih" ColumnName="kaldigi_ctarih" />
+                <ScalarProperty Name="kaldigi_gtarih" ColumnName="kaldigi_gtarih" />
+                <ScalarProperty Name="kaldigi_oda" ColumnName="kaldigi_oda" />
+                <ScalarProperty Name="mus_tel" ColumnName="mus_tel" />
+                <ScalarProperty Name="mus_soyad" ColumnName="mus_soyad" />
+                <ScalarProperty Name="mus_ad" ColumnName="mus_ad" />
+                <ScalarProperty Name="mus_tc" ColumnName="mus_tc" />
+                <ScalarProperty Name="mus_id" ColumnName="mus_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="odalar">
+            <EntityTypeMapping TypeName="otelaspModel.odalar">
+              <MappingFragment StoreEntitySet="odalar">
+                <ScalarProperty Name="oda_ucret" ColumnName="oda_ucret" />
+                <ScalarProperty Name="oda_ozellik" ColumnName="oda_ozellik" />
+                <ScalarProperty Name="oda_durum" ColumnName="oda_durum" />
+                <ScalarProperty Name="oda_tip" ColumnName="oda_tip" />
+                <ScalarProperty Name="oda_id" ColumnName="oda_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="odalar_kayit">
+            <EntityTypeMapping TypeName="otelaspModel.odalar_kayit">
+              <MappingFragment StoreEntitySet="odalar_kayit">
+                <ScalarProperty Name="kayit_gecerlilik" ColumnName="kayit_gecerlilik" />
+                <ScalarProperty Name="kayit_cikis_tarih" ColumnName="kayit_cikis_tarih" />
+                <ScalarProperty Name="kayit_giris_tarih" ColumnName="kayit_giris_tarih" />
+                <ScalarProperty Name="kayit_oda_id" ColumnName="kayit_oda_id" />
+                <ScalarProperty Name="kayit_mus_tc" ColumnName="kayit_mus_tc" />
+                <ScalarProperty Name="kayit_id" ColumnName="kayit_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="otel_log">
+            <EntityTypeMapping TypeName="otelaspModel.otel_log">
+              <MappingFragment StoreEntitySet="otel_log">
+                <ScalarProperty Name="islem_yapilan_zaman" ColumnName="islem_yapilan_zaman" />
+                <ScalarProperty Name="islem_yapan" ColumnName="islem_yapan" />
+                <ScalarProperty Name="islem_aciklama" ColumnName="islem_aciklama" />
+                <ScalarProperty Name="islem_id" ColumnName="islem_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

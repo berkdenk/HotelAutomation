@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="fb4158446bdc462d82fdc3c54ff324a5" Name="Diagram1">
+        <EntityTypeShape EntityType="otelaspModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="otelaspModel.yetkiler" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="otelaspModel.yetkili" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="otelaspModel.FK_yetkili_yetkiler" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="otelaspModel.musteriler" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="otelaspModel.odalar" Width="1.5" PointX="3.375" PointY="3.875" />
+        <EntityTypeShape EntityType="otelaspModel.odalar_kayit" Width="1.5" PointX="5.625" PointY="3.875" />
+        <AssociationConnector Association="otelaspModel.FK_odalar_kayit_odalar" />
+        <EntityTypeShape EntityType="otelaspModel.otel_log" Width="1.5" PointX="0.75" PointY="6.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

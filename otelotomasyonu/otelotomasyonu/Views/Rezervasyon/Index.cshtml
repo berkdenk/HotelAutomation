@@ -1,0 +1,150 @@
+﻿@using otelotomasyonu.Models
+@model List<odalar_kayit>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .disabled {
+            background-color: transparent;
+            border-color: none;
+            border-style: none;
+        }
+
+        .enabled {
+            background-color: white;
+            border-color: lightslategray;
+            border-style: solid;
+        }
+    </style>
+    <script>
+            function sil(id) {
+            if (confirm(id + 'li kullanıcıyı silmek istediğinize emin misiniz?')) {
+                // Save it!
+                window.location = "Sil?kayit_id="+id;
+                } else {
+                // Do nothing!
+
+                }
+            }
+            function degistir  (id) {
+            var tc = document.getElementById(id + "tc");
+            var giris = document.getElementById(id + "giris");
+            var cikis = document.getElementById(id + "cikis");
+            var degistir = document.getElementById(id + "degistir");
+
+
+            if (tc.className == "disabled") {
+                tc.classList.remove("disabled");
+                tc.classList.add("enabled");
+
+            }
+            else {
+                tc.classList.remove("enabled");
+                tc.classList.add("disabled");
+            }
+            if (giris.className == "disabled") {
+                giris.classList.remove("disabled");
+                giris.classList.add("enabled");
+
+            }
+            else {
+                giris.classList.remove("enabled");
+                giris.classList.add("disabled");
+            }
+            if (cikis.className == "disabled") {
+                cikis.classList.remove("disabled");
+                cikis.classList.add("enabled");
+
+            }
+            else {
+                cikis.classList.remove("enabled");
+                cikis.classList.add("disabled");
+            }
+            if (degistir.classList.contains("btn-warning")) {
+                degistir.classList.remove("btn-warning");
+                degistir.classList.add("btn-success");
+                degistir.innerText = "Kaydet"
+                
+            }
+            else {
+                degistir.classList.remove("btn-success");
+                degistir.classList.add("btn-warning");
+                degistir.innerText = "Düzenle"
+                window.location= "Guncelle?kayit_id=" + id + "&giris_tarih=" + giris.value + "&cikis_tarih=" + cikis.value + "&tc=" + tc.value;
+                
+            }
+
+
+        }
+
+
+
+    </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezervasyon Sayfasi</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <link href="~/login-form-17/css2/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/login-form-17/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });</script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row header" style="text-align:center;color:green">
+            <h3>Kayıtlı Rezervasyonlar</h3>
+        </div>
+        <form method="post">
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Oda ID</th>
+                        <th>Müşteri TC</th>
+                        <th>Giriş Tarihi</th>
+                        <th>Çıkış Tarihi</th>
+                        <th>Geçerlilik Durumu</th>
+                        <th>Düzenleme</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        if (item.kayit_gecerlilik == true)
+                        {
+                            <tr>
+
+                                <td><input type="text" name="@item.kayit_oda_id" value="@item.kayit_oda_id" style="background-color:transparent;border-style:none;" /></td>
+                                <td><input type="text" name="@item.kayit_mus_tc" id="@(item.kayit_id)tc"   value="@item.kayit_mus_tc" class="disabled" /> </td>
+                                <td><input type="text" name="@item.kayit_giris_tarih" id="@(item.kayit_id)giris" value="@item.kayit_giris_tarih"  class="disabled" /></td>
+                                <td><input type="text" name="@item.kayit_cikis_tarih" id="@(item.kayit_id)cikis" value="@item.kayit_cikis_tarih"  class="disabled" /></td>
+                                <td>@if (item.kayit_gecerlilik == true) { Write("Geçerli"); }</td>
+                                <td>
+                                    <a id="@item.kayit_id" name="@item.kayit_id" onclick="sil(@item.kayit_id)" class="btn btn-danger">Sil</a> @if (!User.IsInRole("3"))
+                                    {
+                                        <a  onclick="degistir(@item.kayit_id)" name="@item.kayit_id" id="@(item.kayit_id)degistir" class="btn btn-warning">Düzenle</a>
+                                        
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+</html>
+

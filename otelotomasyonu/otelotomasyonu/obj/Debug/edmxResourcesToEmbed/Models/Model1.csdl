@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="otelaspModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="yetkiler">
+    <Key>
+      <PropertyRef Name="yetki_id" />
+    </Key>
+    <Property Name="yetki_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="yetki_ad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="yetkili" Relationship="Self.FK_yetkili_yetkiler" FromRole="yetkiler" ToRole="yetkili" />
+  </EntityType>
+  <EntityType Name="yetkili">
+    <Key>
+      <PropertyRef Name="u_id" />
+    </Key>
+    <Property Name="u_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="u_ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="u_password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="u_yetki" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="yetkiler" Relationship="Self.FK_yetkili_yetkiler" FromRole="yetkili" ToRole="yetkiler" />
+    <Property Name="u_gecerli" Type="Boolean" />
+  </EntityType>
+  <Association Name="FK_yetkili_yetkiler">
+    <End Role="yetkiler" Type="Self.yetkiler" Multiplicity="1" />
+    <End Role="yetkili" Type="Self.yetkili" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="yetkiler">
+        <PropertyRef Name="yetki_id" />
+      </Principal>
+      <Dependent Role="yetkili">
+        <PropertyRef Name="u_yetki" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="otelaspEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="yetkiler" EntityType="Self.yetkiler" />
+    <EntitySet Name="yetkili" EntityType="Self.yetkili" />
+    <AssociationSet Name="FK_yetkili_yetkiler" Association="Self.FK_yetkili_yetkiler">
+      <End Role="yetkiler" EntitySet="yetkiler" />
+      <End Role="yetkili" EntitySet="yetkili" />
+    </AssociationSet>
+    <EntitySet Name="musteriler" EntityType="otelaspModel.musteriler" />
+    <EntitySet Name="odalar" EntityType="otelaspModel.odalar" />
+    <EntitySet Name="odalar_kayit" EntityType="otelaspModel.odalar_kayit" />
+    <AssociationSet Name="FK_odalar_kayit_odalar" Association="otelaspModel.FK_odalar_kayit_odalar">
+      <End Role="odalar" EntitySet="odalar" />
+      <End Role="odalar_kayit" EntitySet="odalar_kayit" />
+    </AssociationSet>
+    <EntitySet Name="otel_log" EntityType="otelaspModel.otel_log" />
+  </EntityContainer>
+  <EntityType Name="musteriler">
+    <Key>
+      <PropertyRef Name="mus_id" />
+    </Key>
+    <Property Name="mus_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="mus_tc" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="mus_ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="mus_soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="mus_tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="kaldigi_oda" Type="Int32" />
+    <Property Name="kaldigi_gtarih" Type="DateTime" Precision="3" />
+    <Property Name="kaldigi_ctarih" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="odalar">
+    <Key>
+      <PropertyRef Name="oda_id" />
+    </Key>
+    <Property Name="oda_id" Type="Int32" Nullable="false" />
+    <Property Name="oda_tip" Type="Int16" />
+    <Property Name="oda_durum" Type="Boolean" />
+    <Property Name="oda_ozellik" Type="Int16" />
+    <Property Name="oda_ucret" Type="Int32" />
+    <NavigationProperty Name="odalar_kayit" Relationship="otelaspModel.FK_odalar_kayit_odalar" FromRole="odalar" ToRole="odalar_kayit" />
+  </EntityType>
+  <EntityType Name="odalar_kayit">
+    <Key>
+      <PropertyRef Name="kayit_id" />
+    </Key>
+    <Property Name="kayit_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="kayit_mus_tc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="kayit_oda_id" Type="Int32" />
+    <Property Name="kayit_giris_tarih" Type="DateTime" Precision="3" />
+    <Property Name="kayit_cikis_tarih" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="odalar" Relationship="otelaspModel.FK_odalar_kayit_odalar" FromRole="odalar_kayit" ToRole="odalar" />
+    <Property Name="kayit_gecerlilik" Type="Boolean" />
+  </EntityType>
+  <Association Name="FK_odalar_kayit_odalar">
+    <End Type="otelaspModel.odalar" Role="odalar" Multiplicity="0..1" />
+    <End Type="otelaspModel.odalar_kayit" Role="odalar_kayit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="odalar">
+        <PropertyRef Name="oda_id" />
+      </Principal>
+      <Dependent Role="odalar_kayit">
+        <PropertyRef Name="kayit_oda_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="otel_log">
+    <Key>
+      <PropertyRef Name="islem_id" />
+    </Key>
+    <Property Name="islem_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="islem_aciklama" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="islem_yapan" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="islem_yapilan_zaman" Type="DateTime" Precision="0" />
+  </EntityType>
+</Schema>
